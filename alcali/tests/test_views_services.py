@@ -215,6 +215,8 @@ def test_notifications_delete_all(admin_client, notification):
 
 @pytest.mark.django_db
 def test_users_form_create():
+    # NOTE: This dict can be a fixture, or even a list of fixtures
+    #       with potential edge cases if necessary(i.e password too weak).
     form_data = {
         "username": "foo",
         "first_name": "bar",

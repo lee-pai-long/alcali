@@ -15,6 +15,9 @@ def test_index(admin_client):
     assert response.status_code == 200
 
 
+# NOTE: Fixtures that are not used inside the test function/method
+#       (e.g context fixtures) can be declare with @pytest.mark.usefixtures,
+#       i.e: @pytest.mark.usefixtures('dummy_state')
 def test_graph_no_filter(admin_client, highstate, dummy_state):
     highstate()
     response = admin_client.post(reverse("index"), {"period": 0})

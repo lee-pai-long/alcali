@@ -6,10 +6,12 @@ def test_user_settings_attr(django_user_model):
     All user_settings are added on create_user.
     :return:
     """
+    # TODO: Put credentials as fixtures.
     username = "user1"
     password = "verystrongpasswordindeed"
     user1 = django_user_model.objects.create_user(username=username, password=password)
     assert hasattr(user1, "user_settings")
+    # NOTE: (nitpicking) I would avoid lego_naming and just call this attributes or attrs...
     attr_list = [
         "token",
         "created",
@@ -27,6 +29,7 @@ def test_conform_highstate(minion, highstate):
     highstate = highstate()
     assert minion.conformity()
     assert highstate.success_bool()
+
 
 
 @pytest.mark.django_db

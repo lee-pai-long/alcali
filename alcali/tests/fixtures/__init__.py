@@ -4,6 +4,9 @@ import pytest
 from alcali.web.models.salt import SaltReturns, Jids
 from alcali.web.models.alcali import Keys, Minions, Schedule, Notifications
 
+# TODO: Put json values in files and load them in fixtures.
+#       It will be simpler to maintain.
+
 
 @pytest.fixture
 def jid():

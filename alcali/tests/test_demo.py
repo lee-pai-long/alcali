@@ -19,6 +19,7 @@ def test_default_perms(client, admin_user):
     Default permissions are added to salt, and stored in user_settings.
     """
     # Set perms.
+    # TODO: Those credentials are used in every test, they can be set as fixtures.
     username = "admin"
     password = "password"
     client.login(username=username, password=password)
@@ -74,7 +75,6 @@ def test_runner(admin_client):
     )
     assert response.status_code == 200
 
-
 @pytest.mark.django_db()
 def test_wheel(admin_client):
     response = admin_client.get(reverse("index"), follow=True)
@@ -88,6 +88,7 @@ def test_wheel(admin_client):
 
 @pytest.mark.django_db()
 def test_run_conformity_state(admin_client):
+# XXX: Variable response is never used and the first one will not be reachable.
     response = admin_client.post(
         reverse("run"),
         {
@@ -117,6 +118,13 @@ def test_refresh_keys(admin_client):
 
 @pytest.mark.django_db()
 def test_init_db(admin_client):
+    # NOTE: If possible I would try have one expectation per test method/function.
+    #       It makes naming and understanding each test easier.
+    #       e.g Having each "post, assert code, assert content" in a separate
+    #           function with a very explicit name on what is validate.
+
+    # NOTE: If this is a requirement it should be set to 0 as a fixture
+    #       not define as a expectation.
     assert Functions.objects.count() == 0
     response = admin_client.post(
         reverse("settings"), {"action": "init_db", "target": "master"}

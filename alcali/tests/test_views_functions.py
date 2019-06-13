@@ -1,4 +1,3 @@
-import pendulum
 from django.urls import reverse
 
 
