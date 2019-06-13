@@ -1,3 +1,4 @@
+# TODO: Add a demo rule with cp env.sample .env and docker-compose up...
 .PHONY: ci clean-pyc docs-serve tests dev
 
 clean-pyc:
