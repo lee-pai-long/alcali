@@ -2,6 +2,16 @@
 
 If you just want to have a look, just clone the [repository](https://github.com/latenighttales/alcali.git) and use [docker-compose](https://docs.docker.com/compose/):
 
+<!---
+FIXME: There is no docker-compose.demo.yml in the repo.
+       And if I run `docker-compose up --scale minion=2`
+       (using default compose file), I have a error on the env file:
+       `ERROR: Couldn't find env file: <PATH_TO_PROJECT>/alcali/.env`
+       I know I should copy the env.sample file to .env but
+       either at best the demo should be one command automatic,
+       or at least the procedure should be explicitly documented.
+--->
+
 ```commandline
 git clone https://github.com/latenighttales/alcali.git
 cd alcali
