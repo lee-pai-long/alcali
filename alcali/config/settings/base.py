@@ -9,6 +9,7 @@ from pathlib import Path
 from django.conf.global_settings import DATETIME_INPUT_FORMATS
 from dotenv import load_dotenv
 
+# XXX: Maybe provide sane default for all values(except secret of course).
 # If there's our env var, it means that env file was loaded somehow(docker).
 DB_BACKEND = os.environ.get("DB_BACKEND")
 if not DB_BACKEND:
