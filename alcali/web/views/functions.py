@@ -1,3 +1,5 @@
+# TODO: Add module level docstring to declare this module purpose.
+
 from ansi2html import Ansi2HTMLConverter
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
@@ -43,13 +45,21 @@ def run(request):
         return JsonResponse(response)
 
     # Raw command
-    if request.POST.get("command"):
-        command = request.POST.get("command")
+    # NOTE: Why not lookup for request.POST.get('command') only once,
+    #       e.g: `command = request.POST.get('command'); if command`
+    if request.POST.get('command'):
+        command = request.POST.get('command')
+        # NOTE: I would suggest more domain explicit names,
+        #       e.g raw_command, parsed_command and command_return.
         comm_inst = RawCommand(command)
         parsed = comm_inst.parse()
         ret = run_raw(parsed)
         formatted = "\n"
+        # NOTE: The only change between the two case is the minion_ret statement,
+        #       so why not loop only once and define the statement for both cases ?
         if parsed[0]["fun"] in ["state.apply", "state.highstate"]:
+            # XXX: Is there any more explicit names for k and v,
+            #      command and output(or even cmd and out)
             for k, v in ret.items():
                 minion_ret = highstate_output.output({k: v})
                 formatted += minion_ret + "\n\n"
@@ -57,12 +67,20 @@ def run(request):
             for k, v in ret.items():
                 minion_ret = nested_output.output({k: v})
                 formatted += minion_ret + "\n\n"
+        # NOTE: I would say the conv variable is useless
+        #       and the two statements can be combined
+        #       but this is a matter or taste.
         conv = Ansi2HTMLConverter(inline=False, scheme="xterm")
         html = conv.convert(formatted, ensure_trailing_newline=True)
         return HttpResponse(html)
 
     # Tooltip function documentation.
     if request.POST.get("tooltip") and request.POST.get("client"):
+        # NOTE: The block is unclear on what is the failing point,
+        #       if only desc[0] can fail(e.g we only catch IndexError),
+        #       then Functions.objects.filter should be outside of
+        #       the try/except block and we can directly try to return desc[0]
+        #       or return {}, which will also avoid overriding the same variable.
         try:
             desc = Functions.objects.filter(
                 name=request.POST.get("tooltip"), type=request.POST.get("client")
@@ -74,6 +92,7 @@ def run(request):
 
     if request.POST.get("function_list"):
         client = request.POST.get("client")
+        # NOTE: I would use explicit full word names(i.e target_type, target, functions)
         tgt_type = request.POST.get("target-type")
         tgt = request.POST.get("minion_list")
         fun = request.POST["function_list"]
@@ -81,6 +100,8 @@ def run(request):
         kwargs = {}
 
         # Dry run button
+        # XXX: Is kwargs['test'] expected to be False otherwise of None ?
+        #      if False this can be simplify to bool(dict.get('key')).
         if request.POST.get("test"):
             kwargs["test"] = True
 
