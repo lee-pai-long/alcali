@@ -61,6 +61,15 @@ Example output:
     ------------
     Total:     0
 """
+# XXX: Is the module doctring above copied from somewhere ?
+#      If so beware of the copyright and maybe site where it is comming from.
+
+# NOTE: The namespace seems over explicit,
+#       e.g alcali.web.utils.output.highstate_output.output
+#       even with a relative import output.highstate_output.output
+#       seems more than necessary.
+#       Maybe a __all__ in the module to expose the output function below
+#       as just utils.output.highstate...
 
 # Import python libs
 from __future__ import absolute_import
@@ -88,7 +97,10 @@ colors = {
     "ENDC": "\033[0;0m",
 }
 
-
+# TODO: Split this huge functions to multiple small ones,
+#       currently this has 206 LOC and a mccabe score of 30,
+#       and no specific tests, so it will be very diffucult
+#       to maintain it in the long run.
 def _format_host(host, data, summary):
     tabular = False
     rcounts = {}

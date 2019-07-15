@@ -11,7 +11,7 @@ from alcali.web.utils.input import RawCommand
 from ..models.salt import SaltReturns
 from ..models.alcali import Minions, Conformity
 
-
+# TODO: Remove commented code in a specific commit ot be albe to revert it.
 # def auto_group(minion_list):
 #     return SequenceMatcher(None, [i for i in minion_list]).find_longest_match([0])
 #
@@ -39,6 +39,11 @@ def graph_data(period=7, **kwargs):
     """
     period_frame = timezone.now().date() - timedelta(days=period)
 
+    # NOTE: We will always have 'fun', since there is no instruction
+    #       to handle the opposite case.
+    #       using dict.get then dict.pop becomes redundant
+    #       we can directly pop the value and then compare it
+    #       to our two cases.
     if kwargs.get("fun") == "highstate":
         kwargs.pop("fun")
         data = (
