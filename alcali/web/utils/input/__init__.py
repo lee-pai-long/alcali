@@ -49,6 +49,11 @@ class RawCommand:
             low["batch"] = None
             low["arg"] = args
 
+        # FIXME: Duplicate code here:
+        #        Both runner a and wheel cases are exactly the same,
+        #        We can either put them in the same if statement
+        #        or maybe put the code in function or method and call
+        #        it twice.
         elif self.client.startswith("runner"):
             low["fun"] = args.pop(0)
             for arg in args:
