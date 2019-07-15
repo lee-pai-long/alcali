@@ -9,6 +9,14 @@ from django.db.models import Q
 
 from .salt import SaltReturns
 
+# NOTE: There is a few methods(Minions.last_highstate, Minions.conformity...)
+#       that seems more related to business logic than
+#       to the models themselves.
+#       Beware to not end up in a Fat Models / Skinny controllers trap.
+
+# NOTE: A lot of custom methods in both models modules
+#       can be converted to @property, just for convenience
+#       on the caller side it can be valuable.
 
 # Alcali custom.
 class Functions(models.Model):
@@ -50,6 +58,9 @@ class Minions(models.Model):
 
         # Remove jobs with arguments.
         for state in states:
+            # XXX: I don't understant this, shouldn't the 1st condition
+            #      exclusing the posibility of the two others?
+            #      if so there is missing parenthesis here.
             if (
                 not state.loaded_ret()["fun_args"]
                 or state.loaded_ret()["fun_args"][0] == {"test": True}
@@ -79,6 +90,8 @@ class Minions(models.Model):
             for job in jobs:
                 ret = job.loaded_ret()
                 # if provided args are the same.
+                # XXX: Why the casting to list, isn't the result set testable
+                #      for truthiness ?
                 if not list(
                     set(args) ^ {i for i in ret["fun_args"] if isinstance(i, str)}
                 ):
