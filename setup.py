@@ -25,6 +25,12 @@ setup(
     url="https://github.com/latenighttales/alcali.git",
     packages=find_packages(),
     classifiers=[
+        # TODO: List supported versions more precisely,
+        #   for example at the date of this comment,
+        #   python versions <= 3.4 ahave already reach
+        #   their EOL(https://devguide.python.org/devcycle/#end-of-life-branches).
+        #   But this setup when pushed to PyPi will allow installation on
+        #   versions 3.0 to 3.4.
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
