@@ -38,4 +38,8 @@ class Command(BaseCommand):
         else:
             error = None
 
+        # NOTE: This can simplified with f-string:
+        # f"db:\t{error or 'ok'}\nenv:\t{unset or 'ok'}"
+        # Or is the use of str.format for compatibility reason ?
+        # If so a tox configuration may be necessary.
         self.stdout.write("db:\t{}\nenv:\t{}".format(error or "ok", unset or "ok"))

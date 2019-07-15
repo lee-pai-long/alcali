@@ -41,6 +41,9 @@ class Command(BaseCommand):
             raise CommandError(
                 "Cannot create the Token: user {0} does not exist".format(username)
             )
+        # NOTE: I would have only put the strings in the if/else block,
+        #       and execute the write at the end, I think is simpler
+        #       to maintain when branching only contains the smallest diff.
         if options["reset_token"]:
             self.stdout.write(
                 "Generated token {0} for user {1}".format(token, username)
