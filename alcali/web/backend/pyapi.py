@@ -1,3 +1,5 @@
+# TODO: Remove module in a dedicated commit so, we can revert it, 
+#       instead of keeping commented code.
 # from datetime import datetime
 #
 # import salt.config
