@@ -5,6 +5,10 @@ import sys
 DJANGO_SETTINGS = os.environ.get("DJANGO_SETTINGS", "config.settings.prod")
 
 if __name__ == "__main__":
+    # TODO: DRY this with the __init__.manage function,
+    #       except for the value of the underlying DJANGO_SETTINGS,
+    #       the code is the same so by taking DJANGO_SETTINGS as
+    #       as argument in manage we can have it only in one place.
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", DJANGO_SETTINGS)
 
     try:
