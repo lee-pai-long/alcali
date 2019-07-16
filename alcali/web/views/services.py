@@ -32,7 +32,8 @@ def schedule(request):
 
     # Highstate conformity.
     if request.POST.get("cron"):
-        cron = request.POST.get("cron")
+        # XXX: The two following lines can be replaced by:
+        #      target = request.POST.get("target", '*')
         target = request.POST.get("target")
         if not target:
             target = "*"
@@ -169,6 +170,8 @@ def conformity_detail(request, minion_id):
         last_highstate = last_highstate.loaded_ret()["return"]
         for state in last_highstate:
             state_name = state.split("_|-")[1]
+            # TODO: Put formatted outside the if/elif blocks,
+            #       since it is the same in all cases.
             if last_highstate[state]["result"] is True:
                 formatted = highstate_output.output(
                     {minion_id: {state: last_highstate[state]}}, summary=False
@@ -227,6 +230,9 @@ def search(request):
 def users(request):
 
     form = AlcaliUserForm()
+    # XXX: What is the difference between request having a POST dict
+    #      and request.method being "POST" ?
+    #      If they equivalent we should choose one way an always use it.
     if request.method == "POST":
         form = AlcaliUserForm(request.POST)
         if form.is_valid():
@@ -317,6 +323,8 @@ def settings(request):
     if request.POST.get("action") == "notifications":
         user_notifs = {}
         for status in notifs_status:
+            # XXX: This block can be simplified by:
+            #  user_notifs[status] = status.split("_")[1] in request.POST
             if status.split("_")[1] in request.POST:
                 user_notifs[status] = True
             else:
@@ -375,6 +383,10 @@ def notifications(request):
     # Delete notifications.
     if request.POST.get("action") == "delete":
         notif_id = request.POST.get("id")
+        # XXX: Souldn't the try/except block be only around the .get ?
+        # XXX: Also if we have a specific notification_id and it is
+        #      not found in DB(e.g Notifications.DoesNotExist)
+        #      we still return a success ?
         try:
             if notif_id == "*":
                 Notifications.objects.all().delete()
@@ -386,9 +398,12 @@ def notifications(request):
         return JsonResponse({"result": "success"})
 
     # Create notifications.
+    # XXX: Both tag and data can be retrieve before the if block
+    #      so we can do if data and tag:
     if request.POST.get("data") and request.POST.get("tag"):
         tag = request.POST.get("tag")
         data = request.POST.get("data")
+        # XXX: Both notif_type and user are are used only once
         notif_type = request.POST.get("type")
         user = User.objects.get(username=request.user)
         notif = Notifications.objects.create(
