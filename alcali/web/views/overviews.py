@@ -23,21 +23,33 @@ def index(request):
     """
 
     # On login, get salt permission for user from salt-api.
+    # XXX: So since the set_perms saves the value in DB,
+    #      everytime the same user comes to the index page
+    #      we perform a DB operation ?
     set_perms()
 
     # Update graph data with filters.
     if request.POST.get("period"):
+        # XXX: This variable can be set outside the if block and used int it.
         period_req = request.POST["period"]
+        # XXX: This variable is only used once, why not just use
+        #      request.POST.get("filter") then ?
         filter_req = request.POST.get("filter")
         days, count, error_count = graph_data(int(period_req), fun=filter_req)
         return JsonResponse({"labels": days, "series": [count, error_count]})
 
+    # XXX: Does that mean that the rest of this view can be called with any HTTP verb ?
+
     # Status widget.
+    # XXX: Those 3 variables are only used at the end in the return dict,
+    #      why defining them here ?
     jobs_nb = SaltReturns.objects.count()
     events_nb = SaltEvents.objects.count()
     schedules_nb = Schedule.objects.count()
 
     # Key widget.
+    # XXX: Why overloading keys_status to then only use both only in the
+    #      returned dict ?
     keys_status = list(Keys.objects.values_list("status", flat=True))
     keys_length = len(keys_status)
     keys_status = dict(Counter(keys_status))
@@ -165,6 +177,7 @@ def job_detail(request, jid, minion_id):
 def minions(request):
 
     # Refresh data.
+    # XXX: Target can be set outside the if block and reused.
     if request.POST.get("minion"):
         target = request.POST.get("minion")
 
@@ -231,6 +244,7 @@ def minion_detail(request, minion_id):
     # Remove whitespace from custom fields for JS ids.
     js_custom_fields = [i.name.replace(" ", "") for i in custom_fields]
 
+    # XXX: Most of this variables except grain are used only once.
     grain = minion.loaded_grain()
     last_job = minion.last_job()
     last_highstate = minion.last_highstate()
@@ -276,5 +290,7 @@ def keys(request):
 
 @login_required
 def events(request):
+    # TODO: Put the 100 limit in a config atribute so it can be increase,
+    #       without changing the code.
     e_list = SaltEvents.objects.all().order_by("-alter_time")[:100]
     return render(request, "events_list.html", {"events_list": e_list})
