@@ -88,7 +88,7 @@ def test_wheel(admin_client):
 
 @pytest.mark.django_db()
 def test_run_conformity_state(admin_client):
-# XXX: Variable response is never used and the first one will not be reachable.
+    # XXX: Variable response is never used and the first one will not be reachable.
     response = admin_client.post(
         reverse("run"),
         {

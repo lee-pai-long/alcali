@@ -5,6 +5,7 @@ from urllib.error import URLError
 
 import pendulum
 from pepper import Pepper, PepperException
+
 # TODO: Clear the dependency between this module and the middleware:
 #       There is 3 functions in this module, that can be consider part
 #       of the business logic, that directly depend on that
